@@ -13,7 +13,7 @@ import breakpoints from "../../../../assets/theme/base/breakpoints";
 
 import burceMars from "../../../../assets/images/bruce-mars.jpg";
 
-function Header({ children }) {
+function Header({ children, business }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
 
   useEffect(() => {
@@ -55,10 +55,10 @@ function Header({ children }) {
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
-                Nombre de la Empresa
+                {business.name}
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="regular">
-                Tipo de empresa
+                {business.type}
               </MDTypography>
             </MDBox>
           </Grid>

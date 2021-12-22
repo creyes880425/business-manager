@@ -8,7 +8,7 @@ import Icon from "@mui/material/Icon";
 import MDBox from "../../../../shared/MDBox";
 import MDTypography from "../../../../shared/MDTypography";
 import { Grid, Modal } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MDButton from "../../../../shared/MDButton";
 import MDInput from "../../../../shared/MDInput";
 
@@ -24,12 +24,15 @@ const initialState = {
   phone: ''
 }
 
-const ProfileInfoCard = ({ title, description, info, action, shadow }) => {
+const ProfileInfoCard = ({ title, description, info, action, shadow, actualizar, setActualizar, businessAction, business }) => {
   const labels = [];
   const values = [];
 
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+    setInputs(business);
+  };
   const handleClose = () => {
     setOpen(false)
     setInputs(initialState);
@@ -64,25 +67,45 @@ const ProfileInfoCard = ({ title, description, info, action, shadow }) => {
   const formUpdate = (e) => {
     const { name, value } = e.target;
     setInputs({
-        ...inputs,
-        [name]: value
+      ...inputs,
+      [name]: value
     });
-}
+  }
 
   const formSubmit = (e) => {
     e.preventDefault();
-    axios.post('/api/business', inputs)
+    if (businessAction === 'update') {
+      axios.put(`/api/business/${inputs._id}`, inputs)
       .then(resp => {
         if (resp.data.ok) {
-          Swal.fire('Actualizar datos de Empresa', resp.data.message, 'success');
+          Swal.fire('Actualizar datos', resp.data.message, 'success');
           //setInputs(initialState);
+          setOpen(false);
+          setActualizar(!actualizar)
         } else {
-          Swal.fire('Actualizar datos de Empresa', resp.data.message, 'error');
+          Swal.fire('Actualizar datos', resp.data.message, 'error');
         }
       })
       .catch(err => {
         console.log(err);
       })
+    } else {
+      axios.post('/api/business', inputs)
+        .then(resp => {
+          if (resp.data.ok) {
+            Swal.fire('Actualizar datos', resp.data.message, 'success');
+            //setInputs(initialState);
+            setOpen(false);
+            setActualizar(!actualizar)
+          } else {
+            Swal.fire('Actualizar datos', resp.data.message, 'error');
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+
   }
 
   return (
@@ -93,7 +116,7 @@ const ProfileInfoCard = ({ title, description, info, action, shadow }) => {
         </MDTypography>
         <MDTypography style={{ cursor: "pointer" }} variant="body2" color="success" onClick={handleOpen}>
           <Tooltip title={action.tooltip} placement="top">
-            <Icon>edit</Icon>
+            <Icon>settingsapplicationssharpicon </Icon>
           </Tooltip>
         </MDTypography>
       </MDBox>
@@ -143,7 +166,7 @@ const ProfileInfoCard = ({ title, description, info, action, shadow }) => {
                     </MDBox>
                     <MDBox mt={4} mb={1} >
                       <MDButton style={{ marginRight: '10px' }} variant="gradient" color="success" type="submit">
-                        Crear/Actializar
+                        Actualizar
                       </MDButton>
                       <MDButton variant="gradient" color="error" onClick={handleClose}>
                         Cancelar

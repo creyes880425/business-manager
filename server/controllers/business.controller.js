@@ -53,6 +53,15 @@ module.exports.get = (req, res) => {
         });
 }
 
+module.exports.getByUser = (req, res) => {
+    Business.find({userId: req.params.userId}).populate('user', '-password')
+        .then(data => res.status(200).json({ ok: true, message: 'business', data: data }))
+        .catch(error => {
+            console.log('List By User', error);
+            res.status(500).json({ ok: false, message: 'Error al obtener las empresas del usuario' })
+        });
+}
+
 module.exports.list = (req, res) => {
     Business.find().populate('user', '-password')
         .then(data => res.status(200).json({ ok: true, message: 'business', data: data }))
@@ -70,3 +79,4 @@ module.exports.del = (req, res) => {
             res.status(500).json({ ok: false, message: 'Error al eliminar la empresa' })
         });
 }
+

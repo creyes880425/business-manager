@@ -48,6 +48,6 @@ BusinessSchema.virtual('user', {
 BusinessSchema.set('toObject', { virtuals: true });
 BusinessSchema.set('toJSON', { virtuals: true });
 
-const Business = mongoose.model("Project", BusinessSchema);
+const Business = mongoose.model("Business", BusinessSchema);
 
 module.exports = Business;
