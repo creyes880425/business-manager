@@ -5,17 +5,14 @@ import Card from "@mui/material/Card";
 import MDBox from "../../shared/MDBox";
 import MDTypography from "../../shared/MDTypography";
 
-
 import DashboardLayout from "../../components/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "../../components/Navbars";
-import DataTable from "../../components/Tables/DataTable";
 
-//import projectsTableData from "../../layouts/reservations/data/projectsTableData";
 import { useContext, useEffect, useState } from "react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import BusinessContext from "../../context/business-context";
-import { Button, FormControl, FormControlLabel, FormLabel, Icon, IconButton, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, Tab, Table, TableBody, TableContainer, TableRow, Tabs, TextField, Tooltip } from "@mui/material";
+import { Icon, Modal, Tab, Table, TableBody, TableContainer, TableRow, Tabs, TextField, Tooltip } from "@mui/material";
 import MDButton from "../../shared/MDButton";
 import MDInput from "../../shared/MDInput";
 
@@ -26,7 +23,7 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import DataTableHeadCell from "../../components/Tables/DataTable/DataTableHeadCell";
 import DataTableBodyCell from "../../components/Tables/DataTable/DataTableBodyCell";
 
-const { format, eachDayOfInterval } = require('date-fns');
+const { format } = require('date-fns');
 
 const initialState = {
   name: '',
@@ -47,14 +44,6 @@ const Reservations = () => {
   const [reservations, setReservations] = useState([]);
   const [actualizar, setActualizar] = useState(false);
 
-  const status = [
-    'Reservado',
-    'Confirmado',
-    'En Curso',
-    'Finalizado',
-    'Cancelado',
-  ];
-
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -63,7 +52,7 @@ const Reservations = () => {
 
   const handleClose = () => {
     setOpen(false)
-    //setInputs(initialState);
+    setInputs(initialState);
   };
 
   const editReservation = (e, reservation) => {
@@ -81,7 +70,6 @@ const Reservations = () => {
       default:
         break;
     }
-    console.log(reservation);
     setInputs(reservation);
     setBusinessAction('update');
     setOpen(true);
@@ -89,7 +77,6 @@ const Reservations = () => {
 
   const deleteReservation = (e, id) => {
     e.stopPropagation();
-    console.log(id);
     if (id) {
       Swal.fire({
         title: 'Eliminar la Reservación',
@@ -113,15 +100,12 @@ const Reservations = () => {
 
 
   useEffect(() => {
-    console.log(context);
     if (sessionStorage.getItem('SESSION_BUSINESS')) {
       var _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
       context.setBusiness(_business);
-      console.log(_business);
       axios.get(`/api/reservations/business/${_business.id}`)
         .then(resp => {
           if (resp.data.data) {
-            console.log(resp.data.data);
             setReservations(resp.data.data);
           } else {
             //setBusinessAction('create');
@@ -207,12 +191,6 @@ const Reservations = () => {
         })
     }
   }
-
-  const [age, setAge] = useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
   const [tabValue, setTabValue] = useState(0);
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);

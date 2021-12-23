@@ -24,30 +24,29 @@ const Cover = () => {
 
   const [inputs, setInputs] = useState(initialState);
 
-    const formUpdate = (e) => {
-        const { name, value } = e.target;
-        setInputs({
-            ...inputs,
-            [name]: value
-        });
-    }
+  const formUpdate = (e) => {
+    const { name, value } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value
+    });
+  }
 
-    const formSubmit = (e) => {
-        e.preventDefault();
-        axios.post('/api/register', inputs)
-            .then(resp => {
-                if (resp.data.ok) {
-                    Swal.fire('Registro de Usuarios', resp.data.message, 'success');
-                    setInputs(initialState);
-                } else {
-                    Swal.fire('Registro de Usuarios', resp.data.message, 'error');
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
-
+  const formSubmit = (e) => {
+    e.preventDefault();
+    axios.post('/api/register', inputs)
+      .then(resp => {
+        if (resp.data.ok) {
+          Swal.fire('Registro de Usuarios', resp.data.message, 'success');
+          setInputs(initialState);
+        } else {
+          Swal.fire('Registro de Usuarios', resp.data.message, 'error');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 
   return (
     <CoverLayout>

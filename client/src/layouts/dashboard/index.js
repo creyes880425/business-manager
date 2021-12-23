@@ -25,15 +25,9 @@ const Dashboard = () => {
   const context = useContext(BusinessContext);
 
   useEffect(() => {
-    console.log('antes el if');
-    console.log(context);
-    console.log(sessionStorage.getItem('SESSION_BUSINESS'));
     if (sessionStorage.getItem('SESSION_BUSINESS')) {
-      console.log('en el if');
       var _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
       context.setBusiness(_business);
-      console.log(_business);
-
       //console.log('buscar resrvaciones del dia');
       axios.get(`/api/reservations/business/today/${_business.id}`)
         .then(resp => {

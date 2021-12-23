@@ -88,7 +88,6 @@ export default function App() {
           setUser(resp.data.data);
           sessionStorage.setItem(SESSION_USER, JSON.stringify(resp.data.data));
           //#endregion Buscar la empresa del Usuario
-          console.log(resp.data.data.id);
           await axios.get(`/api/business/user/${resp.data.data.id}`)
             .then(resp => {
               if (resp.data.data[0]) {
