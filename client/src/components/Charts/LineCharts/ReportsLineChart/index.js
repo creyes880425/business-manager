@@ -16,9 +16,38 @@ import MDTypography from "../../../../shared/MDTypography";
 
 // ReportsLineChart configurations
 import configs from "../../../../components/Charts/LineCharts/ReportsLineChart/configs";
+import MDButton from "../../../../shared/MDButton";
 
-function ReportsLineChart({ color, title, chart }) {
+import axios from 'axios';
+import Swal from 'sweetalert2';
+//import BusinessContext from "../../context/business-context";
+
+function ReportsLineChart({ color, title, chart, actualizar, setActualizar }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {});
+
+  const incomes = () => {
+    let _month = Math.floor(Math.random() * (12 - 1 + 1) + 1);
+    let _income = Math.floor(Math.random() * (500 - 0 + 1) + 0);
+    const _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
+    const incomesObj = {
+      month: _month,
+      income: _income,
+      businessId: _business.id
+    };
+    axios.post('/api/incomes/upsert', incomesObj)
+        .then(resp => {
+          if (resp.data.ok) {
+            Swal.fire('Se han actualizado los ingresos', resp.data.message, 'success');
+            // setInputs(initialState);
+            // setOpen(false);
+            setActualizar(!actualizar)
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          Swal.fire('Error al actualizar ingresos', err.message, 'error');
+        })
+  };
 
   return (
     <Card sx={{ height: "100%" }}>
@@ -41,9 +70,12 @@ function ReportsLineChart({ color, title, chart }) {
           [chart, color]
         )}
         <MDBox pt={3} pb={1} px={1}>
-          <MDTypography variant="h6" textTransform="capitalize">
+          {/* <MDTypography variant="h6" textTransform="capitalize">
             {title}
-          </MDTypography>
+          </MDTypography> */}
+          <MDButton variant="gradient" color="success" onClick={incomes}>
+            Generar Ingresos aleatorios
+          </MDButton>
           <Divider />
         </MDBox>
       </MDBox>

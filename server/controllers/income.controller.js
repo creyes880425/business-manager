@@ -64,6 +64,48 @@ module.exports.getByBusiness = (req, res) => {
         });
 }
 
+module.exports.upsert = (req, res) => {
+    const income = req.body;
+    Income.findOneAndUpdate({ month: income.month, businessId: income.businessId }, income)
+        .then(data => {
+            //console.log(JSON.stringify(data));
+            if (data) {
+                //console.log('hay data');
+            }else{
+                Income.create(income)
+                    .then(data => {
+                        Income.findById(data._id)
+                            .then(user => res.json({ ok: true, message: 'Se agregó el ingreso', data: user }))
+                            .catch(error => {
+                                console.log(error);
+                                if (error.name == 'ValidationError')
+                                    res.status(200).json({ ok: false, message: error.message, error: error });
+                                else {
+                                    res.status(200).json({ ok: false, message: 'Error al guardar el ingreso' });
+                                }
+                            });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        if (error.name == 'ValidationError')
+                            res.status(200).json({ ok: false, message: error.message, error: error });
+                        else {
+                            res.status(200).json({ ok: false, message: 'Error al guardar el ingreso' });
+                        }
+                    });
+            }
+            res.status(200).json({ ok: true, message: 'Se actualizó el ingreso', data: Income })
+        })
+        .catch(error => {
+            console.log(JSON.stringify(error));
+            if (error.name === 'ValidationError') {
+                resp.status(500).json({ ok: false, message: error.message, error: error })
+            } else {
+                resp.status(500).json({ ok: false, message: 'Error al guardar el ingreso' })
+            }
+        });
+}
+
 module.exports.list = (req, res) => {
     Income.find()
         .then(data => res.status(200).json({ ok: true, message: 'income', data: data }))

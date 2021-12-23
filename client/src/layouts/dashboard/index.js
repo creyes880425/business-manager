@@ -24,6 +24,8 @@ const Dashboard = () => {
   const [incomes, setIncomes] = useState(initialIncomes);
   const context = useContext(BusinessContext);
 
+  const [actualizar, setActualizar] = useState(false);
+
   useEffect(() => {
     if (sessionStorage.getItem('SESSION_BUSINESS')) {
       var _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
@@ -40,25 +42,50 @@ const Dashboard = () => {
         .catch(error =>
           Swal.fire('Error', error.message, 'error'));
 
-        //console.log('buscar ingresos');
-        axios.get(`/api/incomes/business/${_business.id}`)
-          .then(resp => {
-            if (resp.data.data) {
-              let _incomes = {...incomes};
-              let _datasets = {..._incomes.datasets};
-              let _data = [..._datasets.data];
-              resp.data.data.map((elem, i) => {
-                _data[elem.month - 1] = elem.income;
-              })
-              _datasets.data = _data;
-              _incomes.datasets = _datasets;
-              setIncomes(_incomes);
-            }
-          })
-          .catch(error =>
-            Swal.fire('Error', error.message, 'error'));
+        // //console.log('buscar ingresos');
+        // axios.get(`/api/incomes/business/${_business.id}`)
+        //   .then(resp => {
+        //     if (resp.data.data) {
+        //       let _incomes = {...incomes};
+        //       let _datasets = {..._incomes.datasets};
+        //       let _data = [..._datasets.data];
+        //       resp.data.data.map((elem, i) => {
+        //         _data[elem.month - 1] = elem.income;
+        //       })
+        //       _datasets.data = _data;
+        //       _incomes.datasets = _datasets;
+        //       setIncomes(_incomes);
+        //     }
+        //   })
+        //   .catch(error =>
+        //     Swal.fire('Error', error.message, 'error'));
     }
   }, []);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('SESSION_BUSINESS')) {
+      var _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
+      context.setBusiness(_business);
+
+      //console.log('buscar ingresos');
+      axios.get(`/api/incomes/business/${_business.id}`)
+        .then(resp => {
+          if (resp.data.data) {
+            let _incomes = {...incomes};
+            let _datasets = {..._incomes.datasets};
+            let _data = [..._datasets.data];
+            resp.data.data.map((elem, i) => {
+              _data[elem.month - 1] = elem.income;
+            })
+            _datasets.data = _data;
+            _incomes.datasets = _datasets;
+            setIncomes(_incomes);
+          }
+        })
+        .catch(error =>
+          Swal.fire('Error', error.message, 'error'));
+    }
+  }, [actualizar]);
 
   return (
     <DashboardLayout>
@@ -85,6 +112,8 @@ const Dashboard = () => {
                   title="Ingresos"
                   date=""
                   chart={incomes}
+                  actualizar={actualizar}
+                  setActualizar={setActualizar}
                 />
               </MDBox>
             </Grid>
