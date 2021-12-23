@@ -1,0 +1,26 @@
+### Login
+POST http://localhost:8000/api/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "carlos880425@gmail.com",
+    "password" : "!App.123"
+}
+
+### CREAR Ingreso
+POST http://localhost:8000/api/incomes HTTP/1.1
+x-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYzA1MTgxYzBjNzE0M2YxYmJlN2ExZCIsIm5hbWUiOiJDYXJsb3MiLCJlbWFpbCI6ImNhcmxvczg4MDQyNUBnbWFpbC5jb20iLCJpYXQiOjE2NDAyODAwNzR9.ug_UlKFSeq5URrTf16M0cDpXkHUUEXbt8PomeiTZITs
+content-type: application/json
+
+{
+    "month": 5,
+    "income": 100,
+    "businessId": "61c27fbf34cd410f604265b3"
+}
+
+# ### LOGIN DEL USUARIO
+
+
+# ### LISTAR TODOS LOS USUARIOS
+# GET http://localhost:8000/api/usuarios HTTP/1.1
+# x-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MWE1NGY4NDVhMDJjNmFmODFmNmQxZmMiLCJlbWFpbCI6InNlcGhpdG9yMkBnbWFpbC5jb20iLCJmaXJzdG5hbWUiOiJGcmFuY2lzY28iLCJsYXN0bmFtZSI6IkJvaXNpZXIiLCJpYXQiOjE2MzgyMjM3NDgsImV4cCI6MTYzODIzMDk0OH0.1GNwZ5H5mALIbFIgWz2Ts0gLCaDq9tvnJOIovCTRLhM

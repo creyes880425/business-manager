@@ -2,8 +2,8 @@ import Dashboard from "./layouts/dashboard";
 import Empresa from "./layouts/business";
 import SignIn from "./layouts/authentication/sign-in";
 import SignUp from "./layouts/authentication/sign-up";
+import Reservations from "./layouts/reservations";
 
-// @mui icons
 import Icon from "@mui/material/Icon";
 
 const routes = [
@@ -14,6 +14,14 @@ const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <Dashboard />,
+  },
+  {
+    type: "collapse",
+    name: "Reservaciones",
+    key: "reservaciones",
+    icon: <Icon fontSize="small">eventavailablesharpicon</Icon>,
+    route: "/reservations",
+    component: <Reservations />,
   },
   {
     type: "collapse",

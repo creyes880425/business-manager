@@ -15,5 +15,7 @@ app.use( express.urlencoded( {extended: true }));
 
 require('./routes/user.routes')(app);
 require('./routes/business.routes')(app);
+require('./routes/reservation.routes')(app);
+require('./routes/income.routes')(app);
 
 app.listen(port, () => console.log("Server started"));

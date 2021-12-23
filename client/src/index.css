@@ -1,3 +1,6 @@
 .swal2-container {
     z-index: 20000 !important;
 }
+.date-input-field {
+    max-width: 7rem;
+}

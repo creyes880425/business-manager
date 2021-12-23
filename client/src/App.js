@@ -1,46 +1,25 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
 
-// react-router components
 import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 
-// @mui material components
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-// Material Dashboard 2 React example components
 import Sidenav from "./components/Sidenav";
 
-// Material Dashboard 2 React themes
 import theme from "./assets/theme";
 
-// Material Dashboard 2 React routes
 import routes from "./routes";
 
-// Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav } from "./context/style-context";
 
-// Images
 import brandWhite from "./assets/images/logo-ct.png";
 import brandDark from "./assets/images/logo-ct-dark.png";
 import UserContext from "./context/user-context";
 
 import axios from "axios";
 import Swal from "sweetalert2";
+import BusinessContext from "./context/business-context";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -97,8 +76,10 @@ export default function App() {
     });
 
   const SESSION_USER = 'SESSION_USER';
+  const SESSION_BUSINESS = 'SESSION_BUSINESS';
 
   const [user, setUser] = useState(null);
+  const [business, setBusiness] = useState(null);
 
   const login = (inputs) => {
     axios.post('/api/login', inputs)
@@ -106,6 +87,18 @@ export default function App() {
         if (resp.data.ok) {
           setUser(resp.data.data);
           sessionStorage.setItem(SESSION_USER, JSON.stringify(resp.data.data));
+          //#endregion Buscar la empresa del Usuario
+          console.log(resp.data.data.id);
+          axios.get(`/api/business/user/${resp.data.data.id}`)
+            .then(resp => {
+              if (resp.data.data[0]) {
+                setBusiness(resp.data.data[0]);
+                sessionStorage.setItem(SESSION_BUSINESS, JSON.stringify(resp.data.data[0]));
+              }
+            })
+            .catch(error =>
+              Swal.fire('Error', error.message, 'error'));
+          //#endregion
           navigate('/');
         } else {
           Swal.fire('Login', resp.data.message, 'error');
@@ -118,6 +111,7 @@ export default function App() {
 
   const logout = () => {
     setUser(null);
+    setBusiness(null);
     sessionStorage.clear();
     navigate('/authentication/sign-in');
   }
@@ -150,10 +144,12 @@ export default function App() {
       )}
       {layout === "vr"}
       <UserContext.Provider value={{ user, setUser, login, logout }}>
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-        </Routes>
+        <BusinessContext.Provider value={{ business, setBusiness }}>
+          <Routes>
+            {getRoutes(routes)}
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </Routes>
+        </BusinessContext.Provider>
       </UserContext.Provider>
     </ThemeProvider>
   );

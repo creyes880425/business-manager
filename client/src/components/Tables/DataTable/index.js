@@ -145,6 +145,10 @@ function DataTable({
     entriesEnd = pageSize * (pageIndex + 1);
   }
 
+  const editar = (row) => {
+    console.log(row);
+  }
+
   return (
     <TableContainer sx={{ boxShadow: "none" }}>
       {entriesPerPage || canSearch ? (
@@ -206,6 +210,7 @@ function DataTable({
             return (
               <TableRow {...row.getRowProps()}>
                 {row.cells.map((cell) => (
+                  <>
                   <DataTableBodyCell
                     noBorder={noEndBorder && rows.length - 1 === key}
                     align={cell.column.align ? cell.column.align : "left"}
@@ -213,7 +218,13 @@ function DataTable({
                   >
                     {cell.render("Cell")}
                   </DataTableBodyCell>
+                  <MDTypography color="text" onClick={editar(cell)}>
+                  <Icon>more_vert</Icon>
+                </MDTypography>
+                  </>
+                  
                 ))}
+                
               </TableRow>
             );
           })}

@@ -1,41 +1,69 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import Grid from "@mui/material/Grid";
 
-// Material Dashboard 2 React components
 import MDBox from "../../shared/MDBox";
 
-// Material Dashboard 2 React example components
 import DashboardLayout from "../../components/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "../../components/Navbars";
-import ReportsBarChart from "../../components/Charts/BarCharts/ReportsBarChart";
 import ReportsLineChart from "../../components/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "../../components/Cards/StatisticsCards/ComplexStatisticsCard";
 
-// Data
-import reportsBarChartData from "../../layouts/dashboard/data/reportsBarChartData";
 import reportsLineChartData from "../../layouts/dashboard/data/reportsLineChartData";
+import { useContext, useEffect, useState } from "react";
 
-// Dashboard components
-import Projects from "../../layouts/dashboard/components/Projects";
-import OrdersOverview from "../../layouts/dashboard/components/OrdersOverview";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
-function Dashboard() {
+import BusinessContext from "../../context/business-context";
+
+const initialIncomes = {
+  labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiempre", "Octubre", "Noviembre", "Diciembre"],
+  datasets: { label: "Monto", data: [0,0,0,0,0,0,0,0,0,0,0,0] },
+}
+
+const Dashboard = () => {
   const { sales, tasks } = reportsLineChartData;
+  const [reservations, setReservations] = useState(0);
+  const [incomes, setIncomes] = useState(initialIncomes);
+  const context = useContext(BusinessContext);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('SESSION_BUSINESS')) {
+      var _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
+      context.setBusiness(_business);
+      console.log(_business);
+
+      //console.log('buscar resrvaciones del dia');
+      axios.get(`/api/reservations/business/today/${_business.id}`)
+        .then(resp => {
+          if (resp.data.data) {
+            console.log(resp.data.data);
+            setReservations(resp.data.data.length);
+          } else {
+            //setBusinessAction('create');
+          }
+        })
+        .catch(error =>
+          Swal.fire('Error', error.message, 'error'));
+
+        //console.log('buscar ingresos');
+        axios.get(`/api/incomes/business/${_business.id}`)
+          .then(resp => {
+            if (resp.data.data) {
+              let _incomes = {...incomes};
+              let _datasets = {..._incomes.datasets};
+              let _data = [..._datasets.data];
+              resp.data.data.map((elem, i) => {
+                _data[elem.month - 1] = elem.income;
+              })
+              _datasets.data = _data;
+              _incomes.datasets = _datasets;
+              setIncomes(_incomes);
+            }
+          })
+          .catch(error =>
+            Swal.fire('Error', error.message, 'error'));
+    }
+  }, []);
 
   return (
     <DashboardLayout>
@@ -47,97 +75,21 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="weekend"
-                title="Reservaciones"
-                count={281}
-                percentage={{
-                  color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                icon="assignmentturnedinicon"
-                title="Inventario"
-                count="2,300"
-                percentage={{
-                  color: "success",
-                  amount: "+3%",
-                  label: "than last month",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="success"
-                icon="store"
-                title="Ingresos"
-                count="34k"
-                percentage={{
-                  color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="primary"
-                icon="person_add"
-                title="Empleados"
-                count="+91"
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
+                title="Reservaciones para hoy"
+                count={reservations}
               />
             </MDBox>
           </Grid>
         </Grid>
         <MDBox mt={4.5}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={12} lg={12}>
               <MDBox mb={3}>
-                <ReportsBarChart
+                <ReportsLineChart
                   color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
+                  title="Ingresos"
+                  date=""
+                  chart={incomes}
                 />
               </MDBox>
             </Grid>
