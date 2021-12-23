@@ -83,13 +83,13 @@ export default function App() {
 
   const login = (inputs) => {
     axios.post('/api/login', inputs)
-      .then(resp => {
+      .then(async resp => {
         if (resp.data.ok) {
           setUser(resp.data.data);
           sessionStorage.setItem(SESSION_USER, JSON.stringify(resp.data.data));
           //#endregion Buscar la empresa del Usuario
           console.log(resp.data.data.id);
-          axios.get(`/api/business/user/${resp.data.data.id}`)
+          await axios.get(`/api/business/user/${resp.data.data.id}`)
             .then(resp => {
               if (resp.data.data[0]) {
                 setBusiness(resp.data.data[0]);

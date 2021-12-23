@@ -7,7 +7,6 @@ import DashboardNavbar from "../../components/Navbars";
 import ReportsLineChart from "../../components/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "../../components/Cards/StatisticsCards/ComplexStatisticsCard";
 
-import reportsLineChartData from "../../layouts/dashboard/data/reportsLineChartData";
 import { useContext, useEffect, useState } from "react";
 
 import axios from 'axios';
@@ -21,13 +20,16 @@ const initialIncomes = {
 }
 
 const Dashboard = () => {
-  const { sales, tasks } = reportsLineChartData;
   const [reservations, setReservations] = useState(0);
   const [incomes, setIncomes] = useState(initialIncomes);
   const context = useContext(BusinessContext);
 
   useEffect(() => {
+    console.log('antes el if');
+    console.log(context);
+    console.log(sessionStorage.getItem('SESSION_BUSINESS'));
     if (sessionStorage.getItem('SESSION_BUSINESS')) {
+      console.log('en el if');
       var _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
       context.setBusiness(_business);
       console.log(_business);
