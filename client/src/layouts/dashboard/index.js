@@ -32,7 +32,6 @@ const Dashboard = () => {
       axios.get(`/api/reservations/business/today/${_business.id}`)
         .then(resp => {
           if (resp.data.data) {
-            console.log(resp.data.data);
             setReservations(resp.data.data.length);
           } else {
             //setBusinessAction('create');

@@ -11,7 +11,7 @@ import MDAvatar from "../../../../shared/MDAvatar";
 
 import breakpoints from "../../../../assets/theme/base/breakpoints";
 
-import logo from "../../../../assets/images/bruce-mars.jpg";
+import logo from "../../../../assets/images/avatar.jpg";
 
 function Header({ children, business }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");

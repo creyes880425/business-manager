@@ -25,7 +25,7 @@ const { black, white } = colors;
 const { borderWidth, borderRadius } = borders;
 const { md } = boxShadows;
 
-export default {
+const index = {
   styleOverrides: {
     root: {
       display: "flex",
@@ -42,3 +42,5 @@ export default {
     },
   },
 };
+
+export default index;

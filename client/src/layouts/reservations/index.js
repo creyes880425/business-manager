@@ -45,8 +45,14 @@ const Reservations = () => {
   const [actualizar, setActualizar] = useState(false);
 
   const [open, setOpen] = useState(false);
+  
   const handleOpen = () => {
-    setOpen(true);
+    if (sessionStorage.getItem('SESSION_BUSINESS')) {
+      setOpen(true);
+    }else{
+      Swal.fire('Importante', 'Debe crear una Empresa antes de administrar las Reservaciones', 'info')
+    }
+    
     //setInputs(business);
   };
 
@@ -97,7 +103,6 @@ const Reservations = () => {
       })
     }
   }
-
 
   useEffect(() => {
     if (sessionStorage.getItem('SESSION_BUSINESS')) {
@@ -150,6 +155,7 @@ const Reservations = () => {
             setInputs(initialState);
             setOpen(false);
             setActualizar(!actualizar)
+            setBusinessAction('create');
           } else {
             Swal.fire('Actualizar datos', resp.data.message, 'error');
           }
@@ -157,7 +163,6 @@ const Reservations = () => {
         .catch(err => {
           console.log(err);
         })
-      setBusinessAction('create');
     } else {
       inputs.businessId = context.business.id;
       inputs.date = date;

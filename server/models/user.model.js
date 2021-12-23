@@ -25,7 +25,7 @@ UserSchema.virtual('confirmPassword')
 
 UserSchema.pre('validate', function(next) {
     if(this.password !== this.confirmPassword) {
-        this.invalidate('confirmPassword', 'Las claves no son iguales')
+        this.invalidate('confirmPassword', 'Las contraseñas no coinciden')
     }
     next();
 });

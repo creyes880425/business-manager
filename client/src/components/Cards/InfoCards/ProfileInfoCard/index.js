@@ -8,12 +8,13 @@ import Icon from "@mui/material/Icon";
 import MDBox from "../../../../shared/MDBox";
 import MDTypography from "../../../../shared/MDTypography";
 import { Grid, Modal } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MDButton from "../../../../shared/MDButton";
 import MDInput from "../../../../shared/MDInput";
 
 import axios from "axios";
 import Swal from "sweetalert2";
+import BusinessContext from "../../../../context/business-context";
 
 const initialState = {
   name: '',
@@ -24,9 +25,11 @@ const initialState = {
   phone: ''
 }
 
-const ProfileInfoCard = ({ title, description, info, action, shadow, actualizar, setActualizar, businessAction, business }) => {
+const ProfileInfoCard = ({ title, description, info, action, shadow, actualizar, setActualizar, businessAction, setBusinessAction, business }) => {
   const labels = [];
   const values = [];
+
+  const context = useContext(BusinessContext);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
@@ -94,9 +97,11 @@ const ProfileInfoCard = ({ title, description, info, action, shadow, actualizar,
         .then(resp => {
           if (resp.data.ok) {
             Swal.fire('Actualizar datos', resp.data.message, 'success');
-            //setInputs(initialState);
+            setInputs(resp.data.data);
             setOpen(false);
-            setActualizar(!actualizar)
+            setActualizar(!actualizar);
+            context.setBusiness(resp.data.data);
+            sessionStorage.setItem('SESSION_BUSINESS', JSON.stringify(resp.data.data));
           } else {
             Swal.fire('Actualizar datos', resp.data.message, 'error');
           }
@@ -104,6 +109,7 @@ const ProfileInfoCard = ({ title, description, info, action, shadow, actualizar,
         .catch(err => {
           console.log(err);
         })
+      setBusinessAction('update');
     }
 
   }

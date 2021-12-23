@@ -56,7 +56,7 @@ module.exports.get = (req, res) => {
 }
 
 module.exports.getByBusiness = (req, res) => {
-    Reservation.find({ businessId: req.params.businessId })
+    Reservation.find({ businessId: req.params.businessId }).sort({date: 'asc'})
         .then(data => res.status(200).json({ ok: true, message: 'reservation', data: data }))
         .catch(error => {
             console.log('List By Business', error);

@@ -48,7 +48,7 @@ module.exports.login = (req, res) => {
                         }
                     })
             } else {
-                res.json({ ok: false, message: '2.- Usuario o clave inválido' });
+                res.json({ ok: false, message: 'El usuario no existe. Para ingresar debe registrarse.' });
             }
         }).catch(error => res.json({ ok: false, message: '3.- Usuario o clave inválido' }));
 }

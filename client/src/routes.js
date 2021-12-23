@@ -20,7 +20,7 @@ const routes = [
     name: "Reservaciones",
     key: "reservaciones",
     icon: <Icon fontSize="small">eventavailablesharpicon</Icon>,
-    route: "/reservations",
+    route: "/reservaciones",
     component: <Reservations />,
   },
   {

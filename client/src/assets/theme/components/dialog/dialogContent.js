@@ -25,7 +25,7 @@ const { size } = typography;
 const { text } = colors;
 const { borderWidth, borderColor } = borders;
 
-export default {
+const dialogContent = {
   styleOverrides: {
     root: {
       padding: pxToRem(16),
@@ -39,3 +39,5 @@ export default {
     },
   },
 };
+
+export default dialogContent;

@@ -9,13 +9,13 @@ content-type: application/json
 
 ### CREAR Ingreso
 POST http://localhost:8000/api/incomes HTTP/1.1
-x-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYzA1MTgxYzBjNzE0M2YxYmJlN2ExZCIsIm5hbWUiOiJDYXJsb3MiLCJlbWFpbCI6ImNhcmxvczg4MDQyNUBnbWFpbC5jb20iLCJpYXQiOjE2NDAyODAwNzR9.ug_UlKFSeq5URrTf16M0cDpXkHUUEXbt8PomeiTZITs
+x-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYzRkZGQxNjY1YWJmOTA5ZGQxODhjNSIsIm5hbWUiOiJDYXJsb3MgUmV5ZXMiLCJlbWFpbCI6ImNhcmxvczg4MDQyNUBnbWFpbC5jb20iLCJpYXQiOjE2NDAyOTQxMzl9.nr0sBB9VYso6qmSR_7ukEflduYOaP5VvZCC4PUihOwk
 content-type: application/json
 
 {
-    "month": 5,
-    "income": 100,
-    "businessId": "61c27fbf34cd410f604265b3"
+    "month": 6,
+    "income": 400,
+    "businessId": "61c4ea58a62cbab34ec5fdda"
 }
 
 # ### LOGIN DEL USUARIO

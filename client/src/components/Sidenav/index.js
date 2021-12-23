@@ -30,7 +30,6 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "../../shared/MDBox";
 import MDTypography from "../../shared/MDTypography";
-import MDButton from "../../shared/MDButton";
 
 // Material Dashboard 2 React example components
 import SidenavCollapse from "../../components/Sidenav/SidenavCollapse";
@@ -49,7 +48,7 @@ import {
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
-  const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
+  const { miniSidenav, transparentSidenav, whiteSidenav, darkMode } = controller;
   const location = useLocation();
   const collapseName = location.pathname.replace("/", "");
 

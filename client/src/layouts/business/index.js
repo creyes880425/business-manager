@@ -65,6 +65,7 @@ const Overview = () => {
                 actualizar={actualizar}
                 setActualizar={setActualizar}
                 businessAction={businessAction}
+                setBusinessAction={setBusinessAction}
                 business={business}
               />
               <Divider orientation="vertical" sx={{ mx: 0 }} />
