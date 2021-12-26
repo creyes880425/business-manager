@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { secret } = require('../config/jwt.config');
 
 module.exports.register = (req, res) => {
-    User.find({ $or: [{ email: req.body.email }, { name: req.body.name }] })
+    User.find({ email: req.body.email })
         .then(data => {
             if (!data || data.length == 0) {
                 User.create(req.body)
