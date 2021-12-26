@@ -5,7 +5,6 @@ const IncomeSchema = new mongoose.Schema({
     month: {
         type: Number,
         required: [true, 'El Mes es requerido'],
-        unique: true
     },
     income: {
         type: Number,
@@ -18,6 +17,7 @@ const IncomeSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+IncomeSchema.index({ month: 1, businessId: 1}, { unique: true });
 IncomeSchema.plugin(uniqueValidator, { message: 'La Ingreso debe ser único.' });
 
 IncomeSchema.virtual('business', {
