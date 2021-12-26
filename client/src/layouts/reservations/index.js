@@ -48,6 +48,7 @@ const Reservations = () => {
   
   const handleOpen = () => {
     if (sessionStorage.getItem('SESSION_BUSINESS')) {
+      setDate(new Date());
       setOpen(true);
     }else{
       Swal.fire('Importante', 'Debe crear una Empresa antes de administrar las Reservaciones', 'info');
