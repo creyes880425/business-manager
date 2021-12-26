@@ -69,13 +69,12 @@ module.exports.upsert = (req, res) => {
     Income.findOneAndUpdate({ month: income.month, businessId: income.businessId }, income)
         .then(data => {
             //console.log(JSON.stringify(data));
-            if (data) {
-                //console.log('hay data');
-            }else{
+            if (!data) {
                 Income.create(income)
-                    .then(data => {
-                        Income.findById(data._id)
-                            .then(user => res.json({ ok: true, message: 'Se agregó el ingreso', data: user }))
+                    .then(data2 => {
+                        //console.log(JSON.stringify(data2));
+                        Income.findById(data2._id)
+                            .then(user => res.json({ ok: true, message: 'Se actualizó el ingreso', data: user }))
                             .catch(error => {
                                 console.log(error);
                                 if (error.name == 'ValidationError')
@@ -93,8 +92,10 @@ module.exports.upsert = (req, res) => {
                             res.status(200).json({ ok: false, message: 'Error al guardar el ingreso' });
                         }
                     });
+            }else{
+                res.status(200).json({ ok: true, message: 'Se actualizó el ingreso', data: Income })
             }
-            res.status(200).json({ ok: true, message: 'Se actualizó el ingreso', data: Income })
+            
         })
         .catch(error => {
             console.log(JSON.stringify(error));
