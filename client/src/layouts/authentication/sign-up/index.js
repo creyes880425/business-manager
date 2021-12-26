@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Card from "@mui/material/Card";
 
@@ -23,6 +23,7 @@ const initialState = {
 const Cover = () => {
 
   const [inputs, setInputs] = useState(initialState);
+  const navigate = useNavigate();
 
   const formUpdate = (e) => {
     const { name, value } = e.target;
@@ -39,6 +40,7 @@ const Cover = () => {
         if (resp.data.ok) {
           Swal.fire('Registro de Usuarios', resp.data.message, 'success');
           setInputs(initialState);
+          navigate('/authentication/sign-in')
         } else {
           Swal.fire('Registro de Usuarios', resp.data.message, 'error');
         }

@@ -26,27 +26,31 @@ function ReportsLineChart({ color, title, chart, actualizar, setActualizar }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {});
 
   const incomes = () => {
-    let _month = Math.floor(Math.random() * (12 - 1 + 1) + 1);
-    let _income = Math.floor(Math.random() * (500 - 0 + 1) + 0);
-    const _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
-    const incomesObj = {
-      month: _month,
-      income: _income,
-      businessId: _business.id
-    };
-    axios.post('/api/incomes/upsert', incomesObj)
-        .then(resp => {
-          if (resp.data.ok) {
-            Swal.fire('Se han actualizado los ingresos', resp.data.message, 'success');
-            // setInputs(initialState);
-            // setOpen(false);
-            setActualizar(!actualizar)
-          }
-        })
-        .catch(err => {
-          console.log(err);
-          Swal.fire('Error al actualizar ingresos', err.message, 'error');
-        })
+    if (sessionStorage.getItem('SESSION_BUSINESS')) {
+      let _month = Math.floor(Math.random() * (12 - 1 + 1) + 1);
+      let _income = Math.floor(Math.random() * (500 - 0 + 1) + 0);
+      const _business = JSON.parse(sessionStorage.getItem('SESSION_BUSINESS'));
+      const incomesObj = {
+        month: _month,
+        income: _income,
+        businessId: _business.id
+      };
+      axios.post('/api/incomes/upsert', incomesObj)
+          .then(resp => {
+            if (resp.data.ok) {
+              Swal.fire('Se han actualizado los ingresos', resp.data.message, 'success');
+              // setInputs(initialState);
+              // setOpen(false);
+              setActualizar(!actualizar)
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            Swal.fire('Error al actualizar ingresos', err.message, 'error');
+          })
+    } else {
+      Swal.fire('Importante', 'Debe crear una Empresa antes de generar Ingresos', 'info');
+    }
   };
 
   return (
